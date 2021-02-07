@@ -1,7 +1,8 @@
 import os
 import sys
 import platform
-from PIL import Image, ImageDraw, ImageFont
+import tkinter as tk
+from PIL import Image, ImageDraw, ImageFont, ImageTk
 
 # フォントを選択
 try:
@@ -15,7 +16,7 @@ except:
     print("フォントが見当たりません")
     exit()
 
-font_size = 36
+font_size = 28
 
 color_white = (255, 255, 255)
 color_red = (255, 0, 0)
@@ -23,6 +24,8 @@ img_size = (300, 300)
 
 hanco_img = Image.new('RGBA', (300, 300), color_white)
 draw = ImageDraw.Draw(hanco_img)
+
+print(type(hanco_img))
 
 #  ---------- ---------- ハンコ描画処理 ---------- ----------
 # 外枠を作成
@@ -42,20 +45,21 @@ width = hanco_img.size[0]
 height = hanco_img.size[1]
 draw.text((((width - w)/2), 50), message, font=corp_font, fill=color_red)
 
-date_font = ImageFont.truetype(font_type,40)
-message = "２１．２．６"
+date_font = ImageFont.truetype(font_type,36)
+message = "２１．１２．２６"
 w, h = draw.textsize(message, date_font)
 width = hanco_img.size[0]
 height = hanco_img.size[1]
 draw.text((((width - w)/2), ((height - h)/2)), message, font=date_font, fill=color_red)
 
-name_font = ImageFont.truetype(font_type,60)
-message = "名前"
+name_font = ImageFont.truetype(font_type,54)
+message = "名前だ"
 w, h = draw.textsize(message, name_font)
 width = hanco_img.size[0]
 height = hanco_img.size[1]
 draw.text((((width - w)/2), 200), message, font=name_font, fill=color_red)
 
+# hanco_img.show()
 #  ---------- ---------- 透過処理 ---------- ----------
 trans = Image.new('RGBA', hanco_img.size, (0, 0, 0, 0))
 width = hanco_img.size[0]
@@ -69,4 +73,41 @@ for x in range(width):
         
         trans.putpixel((x, y), pixel)
 
-trans.save('hanco.png')
+# trans.save('hanco.png')
+
+def ButtonEvent(event):
+    hanco_img.show()
+
+root = tk.Tk()
+root.title(u"eHanco")
+root.geometry("400x300")
+root.resizable(width=False, height=False)
+
+# yomikomi_gazo = Image.open(hanco_img)
+hanco_img = hanco_img.resize((150, 150))
+yomikomi_gazo = ImageTk.PhotoImage(hanco_img)
+
+canvas = tk.Canvas(bg="black", width=hanco_img.height, height=hanco_img.width)
+canvas.place(x=0, y=0)
+canvas.create_image(0, 0, image=yomikomi_gazo, anchor=tk.NW)
+
+EditBox1 = tk.Entry(width=20)
+EditBox1.insert(tk.END,"会社名")
+# EditBox1.place(x=5, y=10)
+EditBox1.pack()
+
+EditBox2 = tk.Entry(width=20)
+EditBox2.insert(tk.END,"日付")
+# EditBox2.place(x=5, y=10)
+EditBox2.pack()
+
+EditBox3 = tk.Entry(width=20)
+EditBox3.insert(tk.END,"名前")
+# EditBox2.place(x=5, y=10)
+EditBox3.pack()
+
+Button = tk.Button(text=u'出力', width=10)
+Button.bind("<Button-1>",ButtonEvent) 
+Button.pack()
+
+root.mainloop()
