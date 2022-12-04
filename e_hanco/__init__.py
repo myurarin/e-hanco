@@ -11,7 +11,7 @@ try:
         font_type = "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"
     else:
         # 対応するフォントが見つからないので
-        raise Exception
+        raise FileNotFoundError("対応するフォントが見つかりません")
 except:
     print("フォントが見当たりません")
     exit()
