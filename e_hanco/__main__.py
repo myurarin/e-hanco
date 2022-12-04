@@ -24,10 +24,21 @@ img_size = (300, 300)
 
 hanco_img = Image.new('RGBA', (300, 300), color_white)
 
+CompanyBox = None
+DateBox = None
+NameBox = None
+canvas = None
 
 #  ---------- ---------- ハンコ描画処理 ---------- ----------
-def hanco_drawing():
+
+
+def hanco_drawing(
+        company_name: str = "株式会社○○",
+        seal_date: str = "22.12.5",
+        seal_name: str = "名字 名前"):
     global hanco_img
+
+    hanco_img = Image.new('RGBA', (300, 300), color_white)
 
     draw = ImageDraw.Draw(hanco_img)
     # 外枠を作成
@@ -40,85 +51,107 @@ def hanco_drawing():
     draw.line((10, 200, 290, 200), fill=color_red, width=10)
 
     # テキストを入力
-    corp_font = ImageFont.truetype(font_type,font_size)
-    message = "株式会社○○"
+    corp_font = ImageFont.truetype(font_type, font_size)
+    message = company_name
     w, h = draw.textsize(message, corp_font)
     width = hanco_img.size[0]
     height = hanco_img.size[1]
     draw.text((((width - w)/2), 50), message, font=corp_font, fill=color_red)
 
-    date_font = ImageFont.truetype(font_type,36)
-    message = "２１．１２．２６"
+    date_font = ImageFont.truetype(font_type, 60)
+    message = seal_date
     w, h = draw.textsize(message, date_font)
     width = hanco_img.size[0]
     height = hanco_img.size[1]
-    draw.text((((width - w)/2), ((height - h)/2)), message, font=date_font, fill=color_red)
+    draw.text((((width - w)/2), ((height - h)/2)),
+              message, font=date_font, fill=color_red)
 
-    name_font = ImageFont.truetype(font_type,54)
-    message = "名字　名前"
+    name_font = ImageFont.truetype(font_type, 48)
+    message = seal_name
     w, h = draw.textsize(message, name_font)
     width = hanco_img.size[0]
     height = hanco_img.size[1]
     draw.text((((width - w)/2), 200), message, font=name_font, fill=color_red)
 
-    # hanco_img.show()
     #  ---------- ---------- 透過処理 ---------- ----------
     trans = Image.new('RGBA', hanco_img.size, (0, 0, 0, 0))
     width = hanco_img.size[0]
     height = hanco_img.size[1]
     for x in range(width):
         for y in range(height):
-            pixel = hanco_img.getpixel( (x, y) )
+            pixel = hanco_img.getpixel((x, y))
 
             if pixel[0] == 255 and pixel[1] == 255 and pixel[2] == 255:
                 continue
-            
+
             trans.putpixel((x, y), pixel)
 
     # trans.save('hanco.png')
 
-def ButtonEvent(event):
-    hanco_img.show()
+
+def window_hanco_drawing():
+    global hanco_img
+    global canvas
+    hanco_img = hanco_img.resize((150, 150))
+    thumbnail = ImageTk.PhotoImage(hanco_img)
+    canvas.create_image(0, 0, image=thumbnail, anchor=tk.NW)
+    canvas.update()
+
+
+def button_event(event):
+    global hanco_img
+    command = str(event.widget["text"])
+    if command == "update":
+        global CompanyBox
+        global DateBox
+        global NameBox
+        hanco_drawing(CompanyBox.get(), DateBox.get(), NameBox.get())
+        window_hanco_drawing()
+    if command == "save":
+        hanco_img.show()
+
 
 def tk_window_init():
     global hanco_img
+    global CompanyBox
+    global DateBox
+    global NameBox
+    global canvas
+
     root = tk.Tk()
     root.title(u"eHanco")
-    root.geometry("400x300")
+    root.geometry("400x200")
     root.resizable(width=False, height=False)
 
-    # yomikomi_gazo = Image.open(hanco_img)
     hanco_img = hanco_img.resize((150, 150))
-    yomikomi_gazo = ImageTk.PhotoImage(hanco_img)
-
-    canvas = tk.Canvas(bg="black", width=hanco_img.height, height=hanco_img.width)
+    thumbnail = ImageTk.PhotoImage(hanco_img)
+    canvas = tk.Canvas(bg="black", width=hanco_img.height,
+                       height=hanco_img.width)
     canvas.place(x=0, y=0)
-    canvas.create_image(0, 0, image=yomikomi_gazo, anchor=tk.NW)
+    canvas.create_image(0, 0, image=thumbnail, anchor=tk.NW)
 
-    EditBox1 = tk.Entry(width=20)
-    EditBox1.insert(tk.END,"会社名")
-    # EditBox1.place(x=5, y=10)
-    EditBox1.pack()
+    CompanyBox = tk.Entry(width=10)
+    CompanyBox.insert(tk.END, "会社名")
+    CompanyBox.pack()
 
-    EditBox2 = tk.Entry(width=20)
-    EditBox2.insert(tk.END,"日付")
-    # EditBox2.place(x=5, y=10)
-    EditBox2.pack()
+    DateBox = tk.Entry(width=10)
+    DateBox.insert(tk.END, "日付")
+    DateBox.pack()
 
-    EditBox3 = tk.Entry(width=20)
-    EditBox3.insert(tk.END,"名前")
-    # EditBox2.place(x=5, y=10)
-    EditBox3.pack()
+    NameBox = tk.Entry(width=10)
+    NameBox.insert(tk.END, "名前")
+    NameBox.pack()
 
-    Button_1 = tk.Button(text=u'更新', width=10)
-    Button_1.bind("<Button-1>",ButtonEvent) 
-    Button_1.pack()
+    Button = tk.Button(text='update', width=8)
+    Button.bind("<ButtonPress>", button_event)
+    Button.pack()
 
-    Button_2 = tk.Button(text=u'出力', width=10)
-    Button_2.bind("<Button-1>",ButtonEvent) 
-    Button_2.pack()
+    Button = tk.Button(text='save', width=8)
+    Button.bind("<ButtonPress>", button_event)
+    Button.pack()
 
     root.mainloop()
+
 
 if __name__ == "__main__":
     hanco_drawing()
