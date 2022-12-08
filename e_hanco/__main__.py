@@ -3,6 +3,7 @@ import sys
 import platform
 import tkinter as tk
 from PIL import Image, ImageDraw, ImageFont, ImageTk
+import time
 
 # フォントを選択
 try:
@@ -29,6 +30,8 @@ DateBox = None
 NameBox = None
 canvas = None
 
+
+root = tk.Tk()
 #  ---------- ---------- ハンコ描画処理 ---------- ----------
 
 
@@ -92,10 +95,14 @@ def hanco_drawing(
 def window_hanco_drawing():
     global hanco_img
     global canvas
-    hanco_img = hanco_img.resize((150, 150))
-    thumbnail = ImageTk.PhotoImage(hanco_img)
+    thumbnail = hanco_img.resize((150, 150))
+    thumbnail = ImageTk.PhotoImage(thumbnail)
+    canvas = tk.Canvas(bg="black", width=150, height=150)
+    canvas.place(x=0, y=0)
     canvas.create_image(0, 0, image=thumbnail, anchor=tk.NW)
     canvas.update()
+
+    root.mainloop()
 
 
 def button_event(event):
@@ -117,16 +124,16 @@ def tk_window_init():
     global DateBox
     global NameBox
     global canvas
-
-    root = tk.Tk()
+    global root
+    
     root.title(u"eHanco")
     root.geometry("400x200")
     root.resizable(width=False, height=False)
 
-    hanco_img = hanco_img.resize((150, 150))
-    thumbnail = ImageTk.PhotoImage(hanco_img)
-    canvas = tk.Canvas(bg="black", width=hanco_img.height,
-                       height=hanco_img.width)
+    thumbnail = hanco_img.resize((150, 150))
+    thumbnail = ImageTk.PhotoImage(thumbnail)
+    canvas = tk.Canvas(bg="black", width=150,
+                       height=150)
     canvas.place(x=0, y=0)
     canvas.create_image(0, 0, image=thumbnail, anchor=tk.NW)
 
@@ -156,3 +163,4 @@ def tk_window_init():
 if __name__ == "__main__":
     hanco_drawing()
     tk_window_init()
+    
