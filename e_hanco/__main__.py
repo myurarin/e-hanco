@@ -125,7 +125,7 @@ def tk_window_init():
     global NameBox
     global canvas
     global root
-    
+
     root.title(u"eHanco")
     root.geometry("400x200")
     root.resizable(width=False, height=False)
@@ -163,4 +163,3 @@ def tk_window_init():
 if __name__ == "__main__":
     hanco_drawing()
     tk_window_init()
-    
