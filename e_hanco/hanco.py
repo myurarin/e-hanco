@@ -10,8 +10,8 @@ def drawing(
         font_type: str,
         img_size: tuple = (300, 300),
         company_name: str = "株式会社○○",
-        seal_date: str = f"{DT_NOW.year}.{DT_NOW.month}.{DT_NOW.date}",
-        seal_name: str = "名字 名前"):
+        seal_date: str = f"{DT_NOW.year}.{DT_NOW.month}.{DT_NOW.day}",
+        seal_name: str = "名字 名前") -> Image.Image:
     hanco_img = Image.new('RGBA', img_size, COLOR_WHITE)
 
     draw = ImageDraw.Draw(hanco_img)
@@ -29,22 +29,20 @@ def drawing(
     w, h = draw.textsize(company_name, corp_font)
     width = hanco_img.size[0]
     height = hanco_img.size[1]
-    draw.text((((width - w)/2), 50), message, font=corp_font, fill=COLOR_RED)
+    draw.text((((width - w)/2), 50), company_name, font=corp_font, fill=COLOR_RED)
 
     date_font = ImageFont.truetype(font_type, 60)
-    message = seal_date
-    w, h = draw.textsize(message, date_font)
+    w, h = draw.textsize(seal_date, date_font)
     width = hanco_img.size[0]
     height = hanco_img.size[1]
     draw.text((((width - w)/2), ((height - h)/2)),
-              message, font=date_font, fill=COLOR_RED)
+              seal_date, font=date_font, fill=COLOR_RED)
 
     name_font = ImageFont.truetype(font_type, 48)
-    message = seal_name
-    w, h = draw.textsize(message, name_font)
+    w, h = draw.textsize(seal_name, name_font)
     width = hanco_img.size[0]
     height = hanco_img.size[1]
-    draw.text((((width - w)/2), 200), message, font=name_font, fill=COLOR_RED)
+    draw.text((((width - w)/2), 200), seal_name, font=name_font, fill=COLOR_RED)
 
     #  ---------- ---------- 透過処理 ---------- ----------
     trans = Image.new('RGBA', hanco_img.size, (0, 0, 0, 0))
@@ -61,4 +59,7 @@ def drawing(
 
     return trans
 
-print(drawing("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"))
+if __name__ == "__main__":
+    pil_img = drawing("/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc")
+    print(pil_img)
+    pil_img.show()
