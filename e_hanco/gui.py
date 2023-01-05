@@ -80,7 +80,6 @@ class hanco_gui:
         self.root.geometry("300x200")
         self.root.resizable(width=False, height=False)
 
-
         # フレームの作成
         frame_left = tk.Frame(self.root)
         frame_right = tk.Frame(self.root)
@@ -91,29 +90,29 @@ class hanco_gui:
                                 height=150)
         self.canvas.place(x=0, y=0)
         self.canvas.create_image(0, 0, image=thumbnail, anchor=tk.NW)
-        self.canvas.pack(in_ = frame_left)
+        self.canvas.pack(in_=frame_left)
 
         self.tk_company_box = tk.Entry(width=12)
         self.tk_company_box.insert(tk.END, "会社名")
-        self.tk_company_box.pack(in_ = frame_right)
+        self.tk_company_box.pack(in_=frame_right)
 
         self.tk_date_box = tk.Entry(width=12)
         self.tk_date_box.insert(tk.END, f"日付")
-        self.tk_date_box.pack(in_ = frame_right)
+        self.tk_date_box.pack(in_=frame_right)
 
         self.tk_name_box = tk.Entry(width=12)
         self.tk_name_box.insert(tk.END, "名前")
-        self.tk_name_box.pack(in_ = frame_right)
+        self.tk_name_box.pack(in_=frame_right)
 
         Button = tk.Button(text='update', width=8)
         Button.bind("<ButtonPress>", self.button_event)
-        Button.pack(in_ = frame_right)
+        Button.pack(in_=frame_right)
 
         Button = tk.Button(text='save', width=8)
         Button.bind("<ButtonPress>", self.button_event)
-        Button.pack(in_ = frame_right)
+        Button.pack(in_=frame_right)
 
-        frame_left.pack(side = tk.LEFT, expand = True)
-        frame_right.pack(side = tk.RIGHT, expand = True)
+        frame_left.pack(side=tk.LEFT, expand=True)
+        frame_right.pack(side=tk.RIGHT, expand=True)
 
         self.root.mainloop()
