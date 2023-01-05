@@ -10,24 +10,27 @@ DT_NOW = datetime.now()
 
 
 class hanco_gui:
+    """
+    e-hanco GUIに関するクラス
+    """
 
     # フォント関連設定値
     font_type: str = ""      # フォントタイプ
-    font_size: int = 0       # フォントサイズ
-    # 画像設定値
-    img_size: tuple = (300, 300)
-    # ハンコ画像
+    # 生成したハンコ画像
     hanco_img = None
-    # 各Box
-    tk_company_box = None     # 社名テキスト
-    tk_date_box = None        # 日付テキスト
-    tk_name_box = None        # 名前テキスト
-    # GUI表示画像
+    # 各入力ボックスの実体
+    tk_company_box = None   # 社名
+    tk_date_box = None      # 日付
+    tk_name_box = None      # 名前
+    # GUIに表示されている画像領域
     canvas = None
-    # tkinter root
+    # tkinter
     root = tk.Tk()
 
     def __init__(self) -> None:
+        """
+        初期化関数
+        """
 
         # フォントの選択
         pf = platform.system()
@@ -41,6 +44,9 @@ class hanco_gui:
         self.hanco_img = hanco.drawing(self.font_type)
 
     def hanco_thumbnail_update(self):
+        """
+        ハンコ画像のGUIに表示されているサムネイル表示を更新
+        """
         thumbnail = self.hanco_img.resize((150, 150))
         thumbnail = ImageTk.PhotoImage(thumbnail)
         self.canvas = tk.Canvas(bg="white", width=150, height=150)
@@ -51,6 +57,9 @@ class hanco_gui:
         self.root.mainloop()
 
     def hanco_save(self):
+        """
+        ハンコ画像を保存
+        """
         # pathを指定
         save_file_path = filedialog.asksaveasfile(
             title="名前を付けて判子を保存",
@@ -64,6 +73,9 @@ class hanco_gui:
             self.hanco_img.save(save_file_path.name)
 
     def button_event(self, event):
+        """
+        ボタンを押下した際のイベント処理分岐
+        """
         command = str(event.widget["text"])
         if command == "update":
             self.hanco_img = hanco.drawing(
@@ -76,6 +88,11 @@ class hanco_gui:
             self.hanco_save()
 
     def tk_init(self):
+        """
+        GUIを表示させるための初期化処理
+        """
+
+        # ウィンドウの初期化
         self.root.title(u"e-Hanco")
         self.root.geometry("300x200")
         self.root.resizable(width=False, height=False)

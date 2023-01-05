@@ -13,6 +13,27 @@ def drawing(
         company_name: str = "株式会社○○",
         seal_date: str = f"{DT_NOW.year}.{DT_NOW.month}.{DT_NOW.day}",
         seal_name: str = "名字 名前") -> Image.Image:
+    """
+    入力値を元にハンコ画像を生成する
+
+    Parameters
+    ----------
+    font_type: str
+        フォントデータのパス
+    img_size: tuple
+        画像サイズ(x, y)
+    company_name: str
+        ハンコに記載する会社名
+    seal_date: str
+        ハンコに記載する日付
+    seal_name: str
+        ハンコに記載する名前
+
+    Returns
+    -------
+    PIL.Image.Image
+        透過済みのハンコ画像
+    """
     hanco_img = Image.new('RGBA', img_size, COLOR_WHITE)
 
     draw = ImageDraw.Draw(hanco_img)
@@ -49,7 +70,7 @@ def drawing(
     draw.text((((width - w)/2), 200), seal_name,
               font=name_font, fill=COLOR_RED)
 
-    #  ---------- ---------- 透過処理 ---------- ----------
+    #  透過処理
     trans = Image.new('RGBA', hanco_img.size, (0, 0, 0, 0))
     width = hanco_img.size[0]
     height = hanco_img.size[1]
