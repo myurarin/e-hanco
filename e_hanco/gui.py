@@ -50,7 +50,7 @@ class hanco_gui:
         thumbnail = self.hanco_img.resize((150, 150))
         thumbnail = ImageTk.PhotoImage(thumbnail)
         self.canvas = tk.Canvas(bg="white", width=150, height=150)
-        self.canvas.place(x=0, y=0)
+        self.canvas.place(x=10, y=23)
         self.canvas.create_image(0, 0, image=thumbnail, anchor=tk.NW)
         self.canvas.update()
 
